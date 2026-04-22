@@ -48,6 +48,7 @@ function abrirSessao(nome, cpf, perfil) {
   var isAdmin = AppState.perfil === 'admin';
   document.getElementById('si-admin').style.display  = isAdmin ? '' : 'none';
   document.getElementById('nav-admin').style.display = isAdmin ? '' : 'none';
+  document.getElementById('si-cfg').style.display    = isAdmin ? '' : 'none';
   var cfgBtn = document.querySelector('.btn-cfg-top');
   if (cfgBtn) cfgBtn.style.display = isAdmin ? '' : 'none';
 
@@ -80,6 +81,7 @@ function verificarSessao() {
     var isAdmin = AppState.perfil === 'admin';
     document.getElementById('si-admin').style.display  = isAdmin ? '' : 'none';
     document.getElementById('nav-admin').style.display = isAdmin ? '' : 'none';
+    document.getElementById('si-cfg').style.display    = isAdmin ? '' : 'none';
     var cfgBtn = document.querySelector('.btn-cfg-top');
     if (cfgBtn) cfgBtn.style.display = isAdmin ? '' : 'none';
 
