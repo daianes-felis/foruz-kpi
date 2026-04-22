@@ -273,14 +273,48 @@ textarea:focus{outline:none;border-color:var(--navy)}
     <div class="login-logo">
       <img src="https://4uz.com.br/wp-content/uploads/2026/01/Frame-2.png" alt="Foruz">
     </div>
-    <h2>Bem-vinda!</h2>
-    <p>Digite sua senha para acessar o sistema de KPIs</p>
-    <div class="login-field">
-      <label>Senha de acesso</label>
-      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
+    <div id="login-view-entrar">
+      <h2>Bem-vinda!</h2>
+      <p class="sub">Acesse o sistema de KPIs Administrativo</p>
+      <div class="login-field">
+        <label>CPF (somente números)</label>
+        <input type="tel" id="login-cpf" placeholder="00000000000" maxlength="14" oninput="mascaraCPF(this)" onkeydown="if(event.key==='Enter')fazerLogin()">
+      </div>
+      <div class="login-field">
+        <label>Senha</label>
+        <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
+      </div>
+      <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+      <div class="login-err" id="login-err">CPF ou senha incorretos.</div>
+      <div style="text-align:center;margin-top:14px">
+        <button onclick="mostrarCadastro()" style="background:none;border:none;color:#1a2b4a;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit">Primeiro acesso? Cadastre sua senha</button>
+      </div>
     </div>
-    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
-    <div class="login-err" id="login-err">Senha incorreta. Tente novamente.</div>
+    <div id="login-view-cadastro" style="display:none">
+      <h2>Primeiro acesso</h2>
+      <p class="sub">Cadastre sua senha para entrar</p>
+      <div class="login-field">
+        <label>Seu nome completo</label>
+        <input type="text" id="cad-nome" placeholder="Ex: Daiane Felis">
+      </div>
+      <div class="login-field">
+        <label>CPF (somente números)</label>
+        <input type="tel" id="cad-cpf" placeholder="00000000000" maxlength="14" oninput="mascaraCPF(this)">
+      </div>
+      <div class="login-field">
+        <label>Crie uma senha</label>
+        <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="login-field">
+        <label>Confirme a senha</label>
+        <input type="password" id="cad-senha2" placeholder="Repita a senha" onkeydown="if(event.key==='Enter')cadastrarUsuario()">
+      </div>
+      <button class="login-btn" onclick="cadastrarUsuario()">Cadastrar</button>
+      <div class="login-err" id="cad-err">Erro ao cadastrar.</div>
+      <div style="text-align:center;margin-top:14px">
+        <button onclick="mostrarLogin()" style="background:none;border:none;color:#1a2b4a;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit">Voltar ao login</button>
+      </div>
+    </div>
     <div class="login-footer">Foruz — Sistema de KPIs Administrativo</div>
   </div>
 </div>
@@ -1031,63 +1065,106 @@ function getAcoesFromStep(fieldId, kpiKey){
 }
 
 // ============================================================
-// USUARIOS — edite aqui direto no GitHub para adicionar/remover
-// Formato: 'senha': 'Nome da Analista'
+// LOGIN COM CPF + SENHA — salvo no Google Sheets
 // ============================================================
-const USUARIOS = {
-  'foruz2026':   'Daiane Felis',
-  'dp2026':      'Analista DP',
-  'fin2026':     'Analista Financeiro',
-  'adm2026':     'Analista ADM'
-};
-// ============================================================
-
 var usuarioLogado = null;
 
-function fazerLogin(){
-  var senha = document.getElementById('login-senha').value;
-  var nome = USUARIOS[senha];
-  if(nome){
-    usuarioLogado = nome;
-    localStorage.setItem('foruz-session', JSON.stringify({nome:nome, ts:Date.now()}));
-    document.getElementById('login-screen').classList.add('hide');
-    document.getElementById('user-nome').textContent = nome;
-    document.getElementById('dpan').value = nome;
-    document.getElementById('finan').value = nome;
-    document.getElementById('login-err').classList.remove('show');
-    init();
-  } else {
-    document.getElementById('login-err').classList.add('show');
-    document.getElementById('login-senha').value = '';
-    document.getElementById('login-senha').focus();
-  }
+function mascaraCPF(el){
+  var v=el.value.replace(/\D/g,'');
+  if(v.length>11)v=v.slice(0,11);
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  el.value=v;
+}
+
+function cpfLimpo(cpf){return cpf.replace(/\D/g,'');}
+
+function mostrarCadastro(){
+  document.getElementById('login-view-entrar').style.display='none';
+  document.getElementById('login-view-cadastro').style.display='block';
+}
+function mostrarLogin(){
+  document.getElementById('login-view-entrar').style.display='block';
+  document.getElementById('login-view-cadastro').style.display='none';
+  document.getElementById('cad-err').classList.remove('show');
+}
+
+async function fazerLogin(){
+  var cpf=cpfLimpo(document.getElementById('login-cpf').value);
+  var senha=document.getElementById('login-senha').value;
+  var err=document.getElementById('login-err');
+  err.classList.remove('show');
+  if(cpf.length!==11||!senha){err.textContent='Preencha CPF e senha.';err.classList.add('show');return;}
+  if(!URL){err.textContent='Configure a conexao com o Sheets primeiro.';err.classList.add('show');return;}
+  try{
+    var r=await fetch(URL+'?action=login&cpf='+cpf+'&senha='+encodeURIComponent(senha));
+    var j=await r.json();
+    if(j.ok&&j.nome){
+      abrirSessao(j.nome,cpf);
+    } else {
+      err.textContent='CPF ou senha incorretos.';err.classList.add('show');
+      document.getElementById('login-senha').value='';
+    }
+  }catch(e){err.textContent='Erro de conexao. Verifique o Sheets.';err.classList.add('show');}
+}
+
+async function cadastrarUsuario(){
+  var nome=document.getElementById('cad-nome').value.trim();
+  var cpf=cpfLimpo(document.getElementById('cad-cpf').value);
+  var s1=document.getElementById('cad-senha').value;
+  var s2=document.getElementById('cad-senha2').value;
+  var err=document.getElementById('cad-err');
+  err.classList.remove('show');
+  if(!nome){err.textContent='Digite seu nome.';err.classList.add('show');return;}
+  if(cpf.length!==11){err.textContent='CPF invalido — digite 11 numeros.';err.classList.add('show');return;}
+  if(s1.length<6){err.textContent='Senha deve ter pelo menos 6 caracteres.';err.classList.add('show');return;}
+  if(s1!==s2){err.textContent='As senhas nao coincidem.';err.classList.add('show');return;}
+  if(!URL){err.textContent='Configure a conexao com o Sheets primeiro.';err.classList.add('show');return;}
+  try{
+    var r=await fetch(URL+'?action=cadastrar&cpf='+cpf+'&nome='+encodeURIComponent(nome)+'&senha='+encodeURIComponent(s1));
+    var j=await r.json();
+    if(j.ok){
+      abrirSessao(nome,cpf);
+    } else {
+      err.textContent=j.error||'Erro ao cadastrar.';err.classList.add('show');
+    }
+  }catch(e){err.textContent='Erro de conexao.';err.classList.add('show');}
+}
+
+function abrirSessao(nome,cpf){
+  usuarioLogado=nome;
+  localStorage.setItem('foruz-session',JSON.stringify({nome:nome,cpf:cpf,ts:Date.now()}));
+  document.getElementById('login-screen').classList.add('hide');
+  document.getElementById('user-nome').textContent=nome;
+  document.getElementById('dpan').value=nome;
+  document.getElementById('finan').value=nome;
+  init();
 }
 
 function fazerLogout(){
-  if(!confirm('Deseja sair do sistema?')) return;
+  if(!confirm('Deseja sair do sistema?'))return;
   localStorage.removeItem('foruz-session');
-  usuarioLogado = null;
-  document.getElementById('login-senha').value = '';
+  usuarioLogado=null;
+  document.getElementById('login-cpf').value='';
+  document.getElementById('login-senha').value='';
   document.getElementById('login-screen').classList.remove('hide');
+  mostrarLogin();
 }
 
 function verificarSessao(){
-  try {
-    var s = localStorage.getItem('foruz-session');
-    if(!s) return false;
-    var sess = JSON.parse(s);
-    // Sessao expira em 8 horas
-    if(Date.now() - sess.ts > 8 * 60 * 60 * 1000){
-      localStorage.removeItem('foruz-session');
-      return false;
-    }
-    usuarioLogado = sess.nome;
+  try{
+    var s=localStorage.getItem('foruz-session');
+    if(!s)return false;
+    var sess=JSON.parse(s);
+    if(Date.now()-sess.ts>8*60*60*1000){localStorage.removeItem('foruz-session');return false;}
+    usuarioLogado=sess.nome;
     document.getElementById('login-screen').classList.add('hide');
-    document.getElementById('user-nome').textContent = sess.nome;
-    document.getElementById('dpan').value = sess.nome;
-    document.getElementById('finan').value = sess.nome;
+    document.getElementById('user-nome').textContent=sess.nome;
+    document.getElementById('dpan').value=sess.nome;
+    document.getElementById('finan').value=sess.nome;
     return true;
-  } catch(e){ return false; }
+  }catch(e){return false;}
 }
 
 // ---- PLANO DE ACAO ----
@@ -1183,13 +1260,23 @@ async function carregarAcoesSheets(){
 }
 
 function init(){
-  if(!verificarSessao()) return; // aguarda login
+  if(!verificarSessao()) return;
   var s=localStorage.getItem('foruz-kpi-url');
   if(s){URL=s;syncDados();carregarAcoesSheets();}
   else{setSync('err');renderP();loadDP();loadFin();}
   setTimeout(initAcaoSteps,300);
 }
-init();
+
+// Iniciar: carregar URL salvo ANTES do login para que o login funcione
+(function startApp(){
+  var urlSalvo=localStorage.getItem('foruz-kpi-url');
+  if(urlSalvo) URL=urlSalvo;
+  if(!verificarSessao()){
+    // Nao logado — mostrar tela de login, mas nao chamar init ainda
+    return;
+  }
+  init();
+})();
 </script>
 </body>
 </html>
