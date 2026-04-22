@@ -45,11 +45,20 @@ function renderListaKpis() {
   var kpis = KPI_CONFIG[_setorAtual];
   var cor  = _setorAtual === 'dp' ? 'var(--navy)' : 'var(--green)';
   var dbMes = _setorAtual === 'dp' ? AppState.db.dp[mes] : AppState.db.fin[mes];
-  var temDados = dbMes && Object.keys(dbMes).length > 2;
+
+  // Mapa de campos por KPI para verificar se foi lançado individualmente
+  var camposPorKpi = {
+    demissoes: 'dem_real', tmd: 'tmd_real', uniforme: 'unif_desc',
+    folha: 'folha_ajust', he: 'he_op', mktzap: 'mkt_tot',
+    boletim: 'bol_ajust', epi: 'epi_real', exames: 'exam_real',
+    cartao: 'cart_real', contratos: 'cont_total', certidoes: 'cert_ok'
+  };
 
   document.getElementById('form-kpi-list').innerHTML =
     '<div class="fkpi-list">' +
     kpis.map(function(k) {
+      var campoKpi = camposPorKpi[k.id];
+      var temDados = dbMes && dbMes[campoKpi] !== null && dbMes[campoKpi] !== undefined && dbMes[campoKpi] !== '';
       return '<div class="fkpi-item" onclick="abrirKpi(\'' + k.id + '\')">' +
         '<div class="fkpi-item-left">' +
           '<div class="fkpi-item-num" style="background:' + cor + '">' + k.num + '</div>' +
