@@ -5,9 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Foruz - KPIs Administrativo</title>
 <style>
+.login-screen{position:fixed;inset:0;background:#f3f4f6;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column}
+.login-screen.hide{display:none}
+.login-box{background:#fff;border-radius:16px;padding:2rem 2.5rem;width:100%;max-width:380px;border:1px solid #e5e7eb;box-shadow:0 8px 40px rgba(0,0,0,.10)}
+.login-logo{text-align:center;margin-bottom:1.5rem}
+.login-logo img{height:48px;width:auto}
+.login-box h2{font-size:18px;font-weight:700;color:#111827;margin-bottom:4px;text-align:center}
+.login-box .sub{font-size:12px;color:#6b7280;text-align:center;margin-bottom:1.5rem}
+.login-field{margin-bottom:12px}
+.login-field label{display:block;font-size:12px;font-weight:500;color:#374151;margin-bottom:4px}
+.login-field input{width:100%;font-size:14px;padding:10px 12px;border-radius:8px;border:1px solid #e5e7eb;background:#f9fafb;color:#111827;font-family:inherit;transition:border .15s;box-sizing:border-box}
+.login-field input:focus{outline:none;border-color:#1a2b4a;box-shadow:0 0 0 3px rgba(26,43,74,.08);background:#fff}
+.login-btn{width:100%;background:#1a2b4a;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;font-family:inherit;transition:background .15s}
+.login-btn:hover{background:#243660}
+.login-err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:8px;padding:9px 12px;font-size:12px;margin-top:10px;display:none;text-align:center}
+.login-err.show{display:block}
+.login-load{text-align:center;font-size:12px;color:#6b7280;margin-top:8px;display:none}
+.login-load.show{display:block}
+.user-bar{display:flex;align-items:center;gap:8px;padding:5px 10px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:20px}
+.user-av{width:26px;height:26px;border-radius:50%;background:#1a2b4a;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.user-nm{font-size:11px;font-weight:600;color:#111827}
+.user-rl{font-size:10px;color:#6b7280}
+.btn-logout{background:none;border:none;cursor:pointer;color:#9ca3af;font-size:11px;padding:2px 6px;border-radius:4px;font-family:inherit}
+.btn-logout:hover{color:#dc2626;background:#fee2e2}
+.role-badge{font-size:9px;padding:1px 6px;border-radius:8px;font-weight:600}
+.rb-admin{background:#fef3c7;color:#92400e}
+.rb-dp{background:#dbeafe;color:#1e40af}
+.rb-fin{background:#d1fae5;color:#065f46}
+.rb-viewer{background:#f3f4f6;color:#6b7280}
+</style>
+
+<style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#1a2b4a;--orange:#F5A623;--green:#0F6E56;--bg:#f3f4f6;--bg2:#fff;--border:#e5e7eb;--text:#111827;--text2:#6b7280;--text3:#9ca3af}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:#111827;display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
+.login-screen.hide{display:none}
+.login-box{background:var(--bg2);border-radius:16px;padding:2rem 2rem 1.75rem;width:100%;max-width:380px;box-shadow:0 25px 60px rgba(0,0,0,.4)}
+.login-logo{text-align:center;margin-bottom:1.5rem}
+.login-logo img{height:48px;width:auto}
+.login-box h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;text-align:center}
+.login-box p{font-size:12px;color:var(--text2);text-align:center;margin-bottom:1.5rem}
+.login-field{margin-bottom:12px}
+.login-field label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px}
+.login-field input{width:100%;font-size:14px;padding:10px 12px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;transition:border .15s;letter-spacing:2px}
+.login-field input:focus{outline:none;border-color:var(--navy);background:var(--bg2);box-shadow:0 0 0 3px rgba(26,43,74,.1)}
+.login-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:9px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px;transition:background .15s}
+.login-btn:hover{background:#243660}
+.login-err{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:8px;padding:9px 12px;font-size:12px;margin-top:10px;text-align:center;display:none}
+.login-err.show{display:block}
+.login-footer{text-align:center;font-size:11px;color:var(--text3);margin-top:1.25rem}
+.login-user-tag{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;border:none;font-family:inherit;color:var(--text2)}
+.login-user-tag:hover{background:var(--border)}
+.login-user-tag svg{width:14px;height:14px}
 .sidebar{width:120px;background:#111827;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;flex-shrink:0;min-height:100vh;position:sticky;top:0}
 .sb-logo{width:96px;height:auto;margin-bottom:6px}
 .sb-logo img{width:100%;height:auto;object-fit:contain;filter:brightness(0) invert(1)}
@@ -215,6 +267,24 @@ textarea:focus{outline:none;border-color:var(--navy)}
 </head>
 <body>
 
+<!-- TELA DE LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="https://4uz.com.br/wp-content/uploads/2026/01/Frame-2.png" alt="Foruz">
+    </div>
+    <h2>Bem-vinda!</h2>
+    <p>Digite sua senha para acessar o sistema de KPIs</p>
+    <div class="login-field">
+      <label>Senha de acesso</label>
+      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
+    </div>
+    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+    <div class="login-err" id="login-err">Senha incorreta. Tente novamente.</div>
+    <div class="login-footer">Foruz — Sistema de KPIs Administrativo</div>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sb-logo">
@@ -249,6 +319,10 @@ textarea:focus{outline:none;border-color:var(--navy)}
       <button class="btn-cfg-top" onclick="abrirCfg()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
         Configurar
+      </button>
+      <button class="login-user-tag" id="user-tag" onclick="fazerLogout()" title="Clique para sair">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+        <span id="user-nome">—</span>
       </button>
     </div>
   </div>
@@ -956,6 +1030,66 @@ function getAcoesFromStep(fieldId, kpiKey){
   return rows.filter(function(r){return r.acao.trim();}).map(function(r){return{acao:r.acao.trim(),status:r.status,responsavel:'',prazo:''};});
 }
 
+// ============================================================
+// USUARIOS — edite aqui direto no GitHub para adicionar/remover
+// Formato: 'senha': 'Nome da Analista'
+// ============================================================
+const USUARIOS = {
+  'foruz2026':   'Daiane Felis',
+  'dp2026':      'Analista DP',
+  'fin2026':     'Analista Financeiro',
+  'adm2026':     'Analista ADM'
+};
+// ============================================================
+
+var usuarioLogado = null;
+
+function fazerLogin(){
+  var senha = document.getElementById('login-senha').value;
+  var nome = USUARIOS[senha];
+  if(nome){
+    usuarioLogado = nome;
+    localStorage.setItem('foruz-session', JSON.stringify({nome:nome, ts:Date.now()}));
+    document.getElementById('login-screen').classList.add('hide');
+    document.getElementById('user-nome').textContent = nome;
+    document.getElementById('dpan').value = nome;
+    document.getElementById('finan').value = nome;
+    document.getElementById('login-err').classList.remove('show');
+    init();
+  } else {
+    document.getElementById('login-err').classList.add('show');
+    document.getElementById('login-senha').value = '';
+    document.getElementById('login-senha').focus();
+  }
+}
+
+function fazerLogout(){
+  if(!confirm('Deseja sair do sistema?')) return;
+  localStorage.removeItem('foruz-session');
+  usuarioLogado = null;
+  document.getElementById('login-senha').value = '';
+  document.getElementById('login-screen').classList.remove('hide');
+}
+
+function verificarSessao(){
+  try {
+    var s = localStorage.getItem('foruz-session');
+    if(!s) return false;
+    var sess = JSON.parse(s);
+    // Sessao expira em 8 horas
+    if(Date.now() - sess.ts > 8 * 60 * 60 * 1000){
+      localStorage.removeItem('foruz-session');
+      return false;
+    }
+    usuarioLogado = sess.nome;
+    document.getElementById('login-screen').classList.add('hide');
+    document.getElementById('user-nome').textContent = sess.nome;
+    document.getElementById('dpan').value = sess.nome;
+    document.getElementById('finan').value = sess.nome;
+    return true;
+  } catch(e){ return false; }
+}
+
 // ---- PLANO DE ACAO ----
 var ACOES_DB = JSON.parse(JSON.stringify(ACOES)); // copia editavel
 
@@ -1048,7 +1182,13 @@ async function carregarAcoesSheets(){
   }catch(e){}
 }
 
-function init(){var s=localStorage.getItem('foruz-kpi-url');if(s){URL=s;syncDados();carregarAcoesSheets();}else{setSync('err');renderP();loadDP();loadFin();}setTimeout(initAcaoSteps,300);}
+function init(){
+  if(!verificarSessao()) return; // aguarda login
+  var s=localStorage.getItem('foruz-kpi-url');
+  if(s){URL=s;syncDados();carregarAcoesSheets();}
+  else{setSync('err');renderP();loadDP();loadFin();}
+  setTimeout(initAcaoSteps,300);
+}
 init();
 </script>
 </body>
