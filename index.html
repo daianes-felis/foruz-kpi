@@ -273,49 +273,19 @@ textarea:focus{outline:none;border-color:var(--navy)}
     <div class="login-logo">
       <img src="https://4uz.com.br/wp-content/uploads/2026/01/Frame-2.png" alt="Foruz">
     </div>
-    <div id="login-view-entrar">
-      <h2>Bem-vinda!</h2>
-      <p class="sub">Acesse o sistema de KPIs Administrativo</p>
-      <div class="login-field">
-        <label>CPF (somente números)</label>
-        <input type="tel" id="login-cpf" placeholder="00000000000" maxlength="14" oninput="mascaraCPF(this)" onkeydown="if(event.key==='Enter')fazerLogin()">
-      </div>
-      <div class="login-field">
-        <label>Senha</label>
-        <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
-      </div>
-      <button class="login-btn" onclick="fazerLogin()">Entrar</button>
-      <div class="login-err" id="login-err">CPF ou senha incorretos.</div>
-      <div style="text-align:center;margin-top:14px">
-        <button onclick="mostrarCadastro()" style="background:none;border:none;color:#1a2b4a;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit">Primeiro acesso? Cadastre sua senha</button>
-      </div>
+    <h2>Bem-vinda!</h2>
+    <p class="sub">Sistema de KPIs — Departamento Administrativo</p>
+    <div class="login-field">
+      <label>CPF</label>
+      <input type="tel" id="login-cpf" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCPF(this)" onkeydown="if(event.key==='Enter')document.getElementById('login-senha').focus()">
     </div>
-    <div id="login-view-cadastro" style="display:none">
-      <h2>Primeiro acesso</h2>
-      <p class="sub">Cadastre sua senha para entrar</p>
-      <div class="login-field">
-        <label>Seu nome completo</label>
-        <input type="text" id="cad-nome" placeholder="Ex: Daiane Felis">
-      </div>
-      <div class="login-field">
-        <label>CPF (somente números)</label>
-        <input type="tel" id="cad-cpf" placeholder="00000000000" maxlength="14" oninput="mascaraCPF(this)">
-      </div>
-      <div class="login-field">
-        <label>Crie uma senha</label>
-        <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres">
-      </div>
-      <div class="login-field">
-        <label>Confirme a senha</label>
-        <input type="password" id="cad-senha2" placeholder="Repita a senha" onkeydown="if(event.key==='Enter')cadastrarUsuario()">
-      </div>
-      <button class="login-btn" onclick="cadastrarUsuario()">Cadastrar</button>
-      <div class="login-err" id="cad-err">Erro ao cadastrar.</div>
-      <div style="text-align:center;margin-top:14px">
-        <button onclick="mostrarLogin()" style="background:none;border:none;color:#1a2b4a;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit">Voltar ao login</button>
-      </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
     </div>
-    <div class="login-footer">Foruz — Sistema de KPIs Administrativo</div>
+    <button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar</button>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-footer">Foruz — Soluções em Mão de Obra</div>
   </div>
 </div>
 
@@ -334,6 +304,9 @@ textarea:focus{outline:none;border-color:var(--navy)}
   <div class="sb-div"></div>
   <div class="sb-icon" onclick="abrirCfg()" title="Configurar conexao">
     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a7.723 7.723 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+  </div>
+  <div class="sb-icon" id="si-admin" onclick="navPg('admin',this)" title="Gerenciar usuarios" style="display:none">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
   </div>
 </div>
 
@@ -365,6 +338,7 @@ textarea:focus{outline:none;border-color:var(--navy)}
     <div class="nav-tabs">
       <div class="nav-tab on" onclick="navPg('painel',this)">Painel de KPIs</div>
       <div class="nav-tab" onclick="navPg('form',this)">Lancar dados</div>
+      <div class="nav-tab" id="nav-admin" onclick="navPg('admin',this)" style="display:none">Usuarios</div>
     </div>
 
     <!-- PAINEL -->
@@ -642,6 +616,54 @@ textarea:focus{outline:none;border-color:var(--navy)}
   </div>
 </div>
 
+    <!-- ADMIN -->
+    <div class="pg" id="pg-admin">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-left">
+            <h2>Gerenciar usuarios</h2>
+            <p>Cadastre, edite e inative o acesso das analistas</p>
+          </div>
+          <div class="card-head-right">
+            <button class="btn btn-navy" onclick="abrirModalUsuario()">+ Novo usuario</button>
+          </div>
+        </div>
+        <table class="kpi-table" id="usuarios-table">
+          <thead><tr><th>Nome</th><th>CPF</th><th>Perfil</th><th>Status</th><th>Acoes</th></tr></thead>
+          <tbody id="usuarios-body"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text2)">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+<!-- MODAL USUARIO -->
+<div class="cfg-overlay" id="modal-usuario">
+  <div class="cfg-box">
+    <button class="cfg-close" onclick="fecharModalUsuario()">x</button>
+    <h3 id="modal-usuario-titulo">Novo usuario</h3>
+    <p>Preencha os dados e repasse as credenciais para a analista.</p>
+    <input type="hidden" id="u-row">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label style="font-size:11px;color:var(--text2);font-weight:500;display:block;margin-bottom:4px">Nome completo</label>
+      <input type="text" id="u-nome" placeholder="Ex: Ana Silva" style="width:100%;font-size:13px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
+      <div><label style="font-size:11px;color:var(--text2);font-weight:500;display:block;margin-bottom:4px">CPF</label>
+      <input type="tel" id="u-cpf" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCPF(this)" style="width:100%;font-size:13px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
+      <div><label style="font-size:11px;color:var(--text2);font-weight:500;display:block;margin-bottom:4px">Senha</label>
+      <input type="text" id="u-senha" placeholder="Ex: foruz2026" style="width:100%;font-size:13px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
+      <div><label style="font-size:11px;color:var(--text2);font-weight:500;display:block;margin-bottom:4px">Perfil</label>
+      <select id="u-perfil" style="width:100%;font-size:13px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"><option value="editor">Editor</option><option value="admin">Admin</option></select></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <label style="font-size:11px;color:var(--text2);font-weight:500">Status:</label>
+      <select id="u-status" style="font-size:12px;padding:6px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select>
+    </div>
+    <div class="cfg-btns">
+      <button class="btn" onclick="fecharModalUsuario()">Cancelar</button>
+      <button class="btn btn-navy" onclick="salvarUsuario()">Salvar usuario</button>
+    </div>
+    <div class="cfg-msg" id="modal-usuario-msg"></div>
+  </div>
+</div>
+
 <!-- CFG MODAL -->
 <div class="cfg-overlay" id="cfg-overlay">
   <div class="cfg-box">
@@ -895,10 +917,15 @@ function navPg(id,el){
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nav-tab,.sb-icon').forEach(function(t){t.classList.remove('on');});
   document.getElementById('pg-'+id).classList.add('on');
-  if(el){el.classList.add('on');}
-  document.querySelectorAll('.nav-tab').forEach(function(t){if(t.textContent.toLowerCase().indexOf(id==='painel'?'painel':'lancar')>=0)t.classList.add('on');});
-  document.getElementById('si-'+id).classList.add('on');
+  if(el)el.classList.add('on');
+  document.querySelectorAll('.nav-tab').forEach(function(t){
+    var txt=t.textContent.toLowerCase();
+    if((id==='painel'&&txt.includes('painel'))||(id==='form'&&txt.includes('lancar'))||(id==='admin'&&txt.includes('usuario')))t.classList.add('on');
+  });
+  var si=document.getElementById('si-'+id);
+  if(si)si.classList.add('on');
   if(id==='painel')renderP();
+  if(id==='admin')carregarUsuarios();
 }
 function irP(){navPg('painel',null);}
 function trocar(a){document.querySelectorAll('.area-tab').forEach(function(b){b.classList.remove('on');});document.querySelectorAll('.af').forEach(function(f){f.classList.remove('on');});document.querySelector('.area-tab.'+a).classList.add('on');document.getElementById('af'+a).classList.add('on');}
@@ -1065,9 +1092,10 @@ function getAcoesFromStep(fieldId, kpiKey){
 }
 
 // ============================================================
-// LOGIN COM CPF + SENHA — salvo no Google Sheets
+// LOGIN CPF + SENHA
 // ============================================================
 var usuarioLogado = null;
+var perfilLogado  = 'editor';
 
 function mascaraCPF(el){
   var v=el.value.replace(/\D/g,'');
@@ -1077,79 +1105,49 @@ function mascaraCPF(el){
   v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
   el.value=v;
 }
-
 function cpfLimpo(cpf){return cpf.replace(/\D/g,'');}
 
-function mostrarCadastro(){
-  document.getElementById('login-view-entrar').style.display='none';
-  document.getElementById('login-view-cadastro').style.display='block';
-}
-function mostrarLogin(){
-  document.getElementById('login-view-entrar').style.display='block';
-  document.getElementById('login-view-cadastro').style.display='none';
-  document.getElementById('cad-err').classList.remove('show');
-}
-
 async function fazerLogin(){
-  var cpf=cpfLimpo(document.getElementById('login-cpf').value);
-  var senha=document.getElementById('login-senha').value;
+  var cpf=cpfLimpo(document.getElementById('login-cpf').value||'');
+  var senha=document.getElementById('login-senha').value||'';
   var err=document.getElementById('login-err');
-  err.classList.remove('show');
-  if(cpf.length!==11||!senha){err.textContent='Preencha CPF e senha.';err.classList.add('show');return;}
-  if(!URL){err.textContent='Configure a conexao com o Sheets primeiro.';err.classList.add('show');return;}
+  err.classList.remove('show');err.textContent='';
+  if(cpf.length!==11){err.textContent='CPF invalido.';err.classList.add('show');return;}
+  if(!senha){err.textContent='Digite sua senha.';err.classList.add('show');return;}
+  var btn=document.getElementById('login-btn');
+  btn.textContent='Entrando...';btn.disabled=true;
+  if(!URL){err.textContent='Sistema sem conexao. Fale com a administradora.';err.classList.add('show');btn.textContent='Entrar';btn.disabled=false;return;}
   try{
     var r=await fetch(URL+'?action=login&cpf='+cpf+'&senha='+encodeURIComponent(senha));
     var j=await r.json();
-    if(j.ok&&j.nome){
-      abrirSessao(j.nome,cpf);
-    } else {
-      err.textContent='CPF ou senha incorretos.';err.classList.add('show');
-      document.getElementById('login-senha').value='';
-    }
-  }catch(e){err.textContent='Erro de conexao. Verifique o Sheets.';err.classList.add('show');}
-}
-
-async function cadastrarUsuario(){
-  var nome=document.getElementById('cad-nome').value.trim();
-  var cpf=cpfLimpo(document.getElementById('cad-cpf').value);
-  var s1=document.getElementById('cad-senha').value;
-  var s2=document.getElementById('cad-senha2').value;
-  var err=document.getElementById('cad-err');
-  err.classList.remove('show');
-  if(!nome){err.textContent='Digite seu nome.';err.classList.add('show');return;}
-  if(cpf.length!==11){err.textContent='CPF invalido — digite 11 numeros.';err.classList.add('show');return;}
-  if(s1.length<6){err.textContent='Senha deve ter pelo menos 6 caracteres.';err.classList.add('show');return;}
-  if(s1!==s2){err.textContent='As senhas nao coincidem.';err.classList.add('show');return;}
-  if(!URL){err.textContent='Configure a conexao com o Sheets primeiro.';err.classList.add('show');return;}
-  try{
-    var r=await fetch(URL+'?action=cadastrar&cpf='+cpf+'&nome='+encodeURIComponent(nome)+'&senha='+encodeURIComponent(s1));
-    var j=await r.json();
-    if(j.ok){
-      abrirSessao(nome,cpf);
-    } else {
-      err.textContent=j.error||'Erro ao cadastrar.';err.classList.add('show');
-    }
+    if(j.ok){abrirSessao(j.nome,cpf,j.perfil||'editor');}
+    else{err.textContent=j.error||'CPF ou senha incorretos.';err.classList.add('show');document.getElementById('login-senha').value='';}
   }catch(e){err.textContent='Erro de conexao.';err.classList.add('show');}
+  btn.textContent='Entrar';btn.disabled=false;
 }
 
-function abrirSessao(nome,cpf){
-  usuarioLogado=nome;
-  localStorage.setItem('foruz-session',JSON.stringify({nome:nome,cpf:cpf,ts:Date.now()}));
+function abrirSessao(nome,cpf,perfil){
+  usuarioLogado=nome;perfilLogado=perfil||'editor';
+  localStorage.setItem('foruz-session',JSON.stringify({nome:nome,cpf:cpf,perfil:perfilLogado,ts:Date.now()}));
   document.getElementById('login-screen').classList.add('hide');
   document.getElementById('user-nome').textContent=nome;
   document.getElementById('dpan').value=nome;
   document.getElementById('finan').value=nome;
+  var isAdmin=perfilLogado==='admin';
+  document.getElementById('si-admin').style.display=isAdmin?'':'none';
+  document.getElementById('nav-admin').style.display=isAdmin?'':'none';
+  var cfgBtn=document.querySelector('.btn-cfg-top');
+  if(cfgBtn)cfgBtn.style.display=isAdmin?'':'none';
   init();
 }
 
 function fazerLogout(){
-  if(!confirm('Deseja sair do sistema?'))return;
+  if(!confirm('Deseja sair?'))return;
   localStorage.removeItem('foruz-session');
-  usuarioLogado=null;
+  usuarioLogado=null;perfilLogado='editor';
   document.getElementById('login-cpf').value='';
   document.getElementById('login-senha').value='';
   document.getElementById('login-screen').classList.remove('hide');
-  mostrarLogin();
 }
 
 function verificarSessao(){
@@ -1158,13 +1156,73 @@ function verificarSessao(){
     if(!s)return false;
     var sess=JSON.parse(s);
     if(Date.now()-sess.ts>8*60*60*1000){localStorage.removeItem('foruz-session');return false;}
-    usuarioLogado=sess.nome;
+    usuarioLogado=sess.nome;perfilLogado=sess.perfil||'editor';
     document.getElementById('login-screen').classList.add('hide');
     document.getElementById('user-nome').textContent=sess.nome;
     document.getElementById('dpan').value=sess.nome;
     document.getElementById('finan').value=sess.nome;
+    var isAdmin=perfilLogado==='admin';
+    document.getElementById('si-admin').style.display=isAdmin?'':'none';
+    document.getElementById('nav-admin').style.display=isAdmin?'':'none';
+    var cfgBtn=document.querySelector('.btn-cfg-top');
+    if(cfgBtn)cfgBtn.style.display=isAdmin?'':'none';
     return true;
   }catch(e){return false;}
+}
+
+// GERENCIAR USUARIOS (admin)
+function abrirModalUsuario(row,nome,cpf,senha,perfil,status){
+  document.getElementById('modal-usuario-titulo').textContent=row?'Editar usuario':'Novo usuario';
+  document.getElementById('u-row').value=row||'';
+  document.getElementById('u-nome').value=nome||'';
+  document.getElementById('u-cpf').value=cpf||'';
+  document.getElementById('u-senha').value=senha||'';
+  document.getElementById('u-perfil').value=perfil||'editor';
+  document.getElementById('u-status').value=status||'ativo';
+  document.getElementById('modal-usuario-msg').className='cfg-msg';
+  document.getElementById('modal-usuario').classList.add('open');
+}
+function fecharModalUsuario(){document.getElementById('modal-usuario').classList.remove('open');}
+
+async function salvarUsuario(){
+  var nome=document.getElementById('u-nome').value.trim();
+  var cpf=cpfLimpo(document.getElementById('u-cpf').value);
+  var senha=document.getElementById('u-senha').value.trim();
+  var perfil=document.getElementById('u-perfil').value;
+  var status=document.getElementById('u-status').value;
+  var row=document.getElementById('u-row').value;
+  var msg=document.getElementById('modal-usuario-msg');
+  msg.className='cfg-msg';
+  if(!nome||cpf.length!==11||!senha){msg.textContent='Preencha todos os campos.';msg.className='cfg-msg err';return;}
+  try{
+    var url=URL+'?action=save_usuario&cpf='+cpf+'&nome='+encodeURIComponent(nome)+'&senha='+encodeURIComponent(senha)+'&perfil='+perfil+'&status='+status+(row?'&row='+row:'');
+    var r=await fetch(url);
+    var j=await r.json();
+    if(j.ok){fecharModalUsuario();carregarUsuarios();toast('Usuario salvo!');}
+    else{msg.textContent=j.error||'Erro ao salvar.';msg.className='cfg-msg err';}
+  }catch(e){msg.textContent='Erro de conexao.';msg.className='cfg-msg err';}
+}
+
+async function carregarUsuarios(){
+  if(!URL)return;
+  try{
+    var r=await fetch(URL+'?action=get_usuarios');
+    var j=await r.json();
+    if(!j.ok)return;
+    var tbody=document.getElementById('usuarios-body');
+    if(!j.data.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text2)">Nenhum usuario cadastrado.</td></tr>';return;}
+    tbody.innerHTML=j.data.map(function(u){
+      var stCls=u.status==='inativo'?'bbad':'bok';
+      var nomeSafe=u.nome.replace(/'/g,"\\'");
+      var cpfFmt=formatCPF(u.cpf);
+      return'<tr><td style="font-weight:500">'+u.nome+'</td><td style="color:var(--text2)">'+cpfFmt+'</td><td><span class="badge binfo">'+u.perfil+'</span></td><td><span class="badge '+stCls+'">'+u.status+'</span></td><td><button class="btn" onclick="abrirModalUsuario('+u.row+',\''+nomeSafe+'\',\''+cpfFmt+'\',\'\',\''+u.perfil+'\',\''+u.status+'\')" style="padding:4px 10px;font-size:11px">Editar</button></td></tr>';
+    }).join('');
+  }catch(e){}
+}
+
+function formatCPF(cpf){
+  var v=String(cpf).replace(/\D/g,'');
+  return v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
 }
 
 // ---- PLANO DE ACAO ----
@@ -1267,15 +1325,11 @@ function init(){
   setTimeout(initAcaoSteps,300);
 }
 
-// Iniciar: carregar URL salvo ANTES do login para que o login funcione
+// Carregar URL salvo antes do login para que autenticacao funcione
 (function startApp(){
   var urlSalvo=localStorage.getItem('foruz-kpi-url');
   if(urlSalvo) URL=urlSalvo;
-  if(!verificarSessao()){
-    // Nao logado — mostrar tela de login, mas nao chamar init ainda
-    return;
-  }
-  init();
+  verificarSessao(); // se tiver sessao valida, chama init internamente
 })();
 </script>
 </body>
